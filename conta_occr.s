@@ -1,0 +1,23 @@
+.text
+.global CONTAOCCR
+.type CONTAOCCR, "function"
+
+CONTAOCCR:		MOV X4, #0
+								LSR X1, X1, #4
+								DUP V1.16B, W2 //PEGA NO CHAR EM W2 E PREENCHE O VETOR 1 COM ESSE CHAR
+
+LOOP:					CBZ X1, END
+								SUB X1, X1, #1
+								LDR Q0, [X0], #16
+								CMEQ V2.16B, V0.16B, V1.16B
+
+								ADDV B3, V2.16B //PASSA PARA O VECTOR 3 PARA A PARTE MENOS SIGNIFICATIVA DO TAMANHO BYTE
+								SMOV X3, V3.B[0] //CONVERTE O BYTE MENOS SIGNIFICATIVO PARA LONG INT
+								NEG X3, X3
+
+								ADD X4, X4, X3
+								B LOOP
+
+
+END: 						MOV X0, X4
+								ret
